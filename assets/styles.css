@@ -1,0 +1,26 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+
+  footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center; 
+    background-color: #343A40;
+    color: #9498a0;
+    flex: 0 0 50px;
+    height: 30px;
+    margin-top: 300px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    display: block;
+}
+
+a{
+    color: inherit;
+}
