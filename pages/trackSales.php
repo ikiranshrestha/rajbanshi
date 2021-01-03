@@ -79,7 +79,7 @@ if (isset($_POST['markSales'])) {
                 </form>
             </div>
             <div class="col-sm-6">
-                <h3>Today's Expenses</h3>
+                <h3>All Time Sales</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr class="table table-striped">

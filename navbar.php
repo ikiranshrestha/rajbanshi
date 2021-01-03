@@ -31,7 +31,7 @@
         <a class="nav-link" href="http://localhost/yamari/pages/profitLoss.php">Profit/ Loss</a>
       </li>
       <li class="nav-item mr-0">
-        <a class="nav-link" href="http://localhost/yamari/pages/meterReading.php">Meter Reading</a>
+        <a class="nav-link" href="http://localhost/yamari/pages/meterRecords.php">Meter Reading</a>
       </li>
     </ul>
   </div>

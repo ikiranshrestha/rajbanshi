@@ -58,6 +58,24 @@ function selectAllFromMenu()
 /**
  * End of Functions for trackExpenses.php UI
  */
+/** 
+ * Functions for trackSales.php UI
+ * This set of functions is to query the database to view the expenses data to the trackSales.php UI
+ */
+
+$fire;
+$conn;
+
+function fetchMenuItems()
+{
+    global $fire, $conn;
+    $menuItemSelection = "SELECT * from menulist";
+    $fire = mysqli_query($conn, $menuItemSelection);
+}
+
+/**
+ * End of Functions for trackExpenses.php UI
+ */
 
 
  /** 

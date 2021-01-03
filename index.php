@@ -8,8 +8,10 @@ require_once('config/config.php');
 // $rate = 0;
 // $amount = "&lt;amount&gt;";
 
-
-if (isset($_POST['insert'])) {
+/**
+ * Refill Raw Materials
+ */
+if (isset($_POST['refillRawItem'])) {
     $name = $_POST['expense_heading'];
     $qty = $_POST['expenseQuantity'];
     $rate = $_POST['expenseRate'];
@@ -32,11 +34,40 @@ if (isset($_POST['insert'])) {
 
             $stockUpdateQuery2 = "UPDATE `stock_raw` SET `stock_quantity`= '$stockQuantity' WHERE stock_heading = '$name'";
             $fire2 = mysqli_query($conn, $stockUpdateQuery2);
+        }
+    }
+    header("location: http://localhost/yamari/");
+}
 
+/**
+ * End of Refill Raw Materials
+ */
+
+ /**
+  * Refill Product/ Menu Items
+  */
+if (isset($_POST['refillProductQuantity'])) {
+    $name = $_POST['menu_item_heading'];
+    $qty = $_POST['menu_item_quantity'];
+    echo $name .", ". $qty;
+    // $date = date("Y/m/d");
+
+    $selectRequired = "SELECT * FROM menulist WHERE menu_item_name = '$name'";
+    $fireUpdateSelection = mysqli_query($conn, $selectRequired);
+
+    if(mysqli_num_rows($fireUpdateSelection) > 0){
+        while($row = mysqli_fetch_assoc($fireUpdateSelection)){
+            $currentItemQuantity = $row['menu_item_quantity'];
+            $currentItemQuantity += $qty;
+            $updateMenuItemQuantity = 
+                "UPDATE `menulist` SET `menu_item_quantity`= '$currentItemQuantity'  WHERE `menu_item_name` = '$name'";
+            $fireMenuItemQuantity = mysqli_query($conn, $updateMenuItemQuantity);
         }
     }
 }
-
+/**
+ * End of Refill Product/ Menu Items
+ */
 ?>
 
 <!DOCTYPE html>
@@ -54,33 +85,63 @@ if (isset($_POST['insert'])) {
 
 <body>
     <div class="container">
-        <form action="" method="POST">
-            <h3>Stock Refill and Expenses Record</h3>
-            <div class="form-group">
-                <!-- <input type="text" class="form-control" name="expenseName" id="expenseName" placeholder="Expense Heading"> -->
-                <select name="expense_heading" class="form-control" id="expense_heading">
-                    <option value="default" selected disabled>--Select the Expense Heading--</option>
-                    <?php
-                    loadExpensesHeadings();
-                    // $fire = mysqli_query($conn, $)
-                    if (mysqli_num_rows($fire) > 0) {
-                        while ($row = mysqli_fetch_assoc($fire)) {
-                            echo "<option  value='" . $row['stock_heading'] . "'>" . $row['stock_heading'] . "</option>";
-                        }
-                    }
-                    ?>
-                </select>
+        <div class="row">
+            <div class="col-sm-6">
+                <form action="" method="POST">
+                    <h3>Raw Stock Refill/ Expenses Record</h3>
+                    <div class="form-group">
+                        <!-- <input type="text" class="form-control" name="expenseName" id="expenseName" placeholder="Expense Heading"> -->
+                        <select name="expense_heading" class="form-control" id="expense_heading">
+                            <option value="default" selected disabled>--Select the Expense Heading--</option>
+                            <?php
+                            loadExpensesHeadings();
+                            // $fire = mysqli_query($conn, $)
+                            if (mysqli_num_rows($fire) > 0) {
+                                while ($row = mysqli_fetch_assoc($fire)) {
+                                    echo "<option  value='" . $row['stock_heading'] . "'>" . $row['stock_heading'] . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="expenseQuantity" id="expenseQuantity" placeholder="Expense Quantity">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="expenseRate" id="expenseRate" placeholder="Expense Rate">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Refill" class="btn btn-success" name="refillRawItem">
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="number" class="form-control" name="expenseQuantity" id="expenseQuantity" placeholder="Expense Quantity">
+            <div class="col-sm-6">
+                <form action="" method="POST">
+                    <h3>Product Stock Refill</h3>
+                    <div class="form-group">
+                        <!-- <input type="text" class="form-control" name="expenseName" id="expenseName" placeholder="Expense Heading"> -->
+                        <select name="menu_item_heading" class="form-control" id="menu_item_heading">
+                            <option value="default" selected disabled>--Select Refill Heading--</option>
+                            <?php
+                            fetchMenuItems();
+                            // $fire = mysqli_query($conn, $menuItemSelection);
+                            if (mysqli_num_rows($fire) > 0) {
+                                while ($row = mysqli_fetch_assoc($fire)) {
+                                    echo "<option  value='" . $row['menu_item_name'] . "' name = '" . $row['menu_item_name'] . "'>" . $row['menu_item_name'] . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="menu_item_quantity" id="menu_item_quantity" placeholder="Product Quantity">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Refill" class="btn btn-success" name="refillProductQuantity">
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="number" class="form-control" name="expenseRate" id="expenseRate" placeholder="Expense Rate">
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Insert" class="btn btn-success" name="insert">
-            </div>
-        </form>
+        </div>
 
     </div>
     <?php
@@ -91,4 +152,5 @@ if (isset($_POST['insert'])) {
 
 
 </body>
+
 </html>
